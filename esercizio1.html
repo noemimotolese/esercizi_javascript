@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione delle iscrizioni</title>
+
+    <style>
+        table, tr, th, td{border: 1px, solid black}
+    </style>
+</head>
+<body>
+    <form id="myForm">
+        
+        <button type="button" onclick="aggiungiIscrizione()" id="aggiungi">aggiungi iscrizione</button>
+        <button type="button" onclick="risultato()" id="mostra">mostra iscrizioni</button>
+
+        <table id="tabella">
+            <tr>
+                <th>ID Studente</th>
+                <td><input type="text" id="id" name="id" required></td>
+            </tr>
+            <tr>
+                <th>Ore di frequenza</th>
+                <td><input type="number" id="ore" name="ore" min="1" required></td>
+            </tr>
+        </table>
+    </form>
+    <script>
+        
+        let iscritti=[]
+        let tabella="<table><tr><th>ID Studente</th></tr><tr><th>Ore di frequenza</th></tr>" 
+
+            
+        function aggiungiIscrizione(){
+            let id=document.getElementById("id").value 
+            let ore=document.getElementById("ore").value 
+            
+            function calcolaQuota(){
+                var costoOra=15
+                let costo
+                if(ore>1 && ore<10){
+                    costo=Number(ore*costoOra)
+                }
+                else if(ore>11 && ore<20){
+                    costo=Number((ore*costoOra)*0.05)
+                }
+                else if(ore>20){
+                    costo=Number((ore*costoOra)*0.10)
+                }
+                return costo
+            }
+            iscritti.push({id: id, ore: ore})
+            document.getElementById("myForm").reset()
+        }
+        
+        function risultato(){
+            for (let iscritto of iscritti){
+                tabella+=`<tr><td>${iscritto.id}</td></tr><tr><td>${iscritto.ore}</td></tr>`
+            }
+            tabella+="</table>"
+        }
+    </script>
+</body>
+</html>
