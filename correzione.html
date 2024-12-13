@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione delle iscrizioni</title>
+
+    <style>
+        table, tr, th, td{border: 1px, solid black}
+    </style>
+</head>
+<body>
+    <form id="myForm">
+        
+        <table>
+            <tr>
+                <th>ID Studente</th>
+                <td><input type="number" id="id" name="id" required></td>
+            </tr>
+            <tr>
+                <th>Ore di frequenza</th>
+                <td><input type="number" id="ore" name="ore" min="1" required></td>
+            </tr>
+        </table>
+
+        <button type="button" onclick="aggiungiIscrizione()" id="aggiungi">aggiungi iscrizione</button>
+        <button type="button" onclick="risultato()" id="mostra">mostra iscrizioni</button>
+
+        <br>
+        <br>
+        <div id="tabella"></div>
+        <br>
+        <br>
+        <h2>Maggiori di 200</h2>
+        <div id="tabella2"></div>
+
+    </form>
+
+    <script>
+        
+        let iscritti=[]
+        let tabella="<table><tr><td>ID Studente</td><td>Ore di frequenza</td><td>Quota</td></tr>" 
+        let tabella2="<table><tr><td>ID Studente</td><td>Ore di frequenza</td><td>Quota</td></tr>" 
+
+            
+        function aggiungiIscrizione(){
+            id=document.getElementById("id").value 
+            ore=document.getElementById("ore").value 
+            quota=calcolaQuota()
+
+            console.log("id: ",id)
+            console.log("ore: ",ore)
+            console.log("quota: ",quota)
+
+            iscritti.push({id:id, ore:ore, quota:quota})
+            
+            function calcolaQuota(){
+                let controllo=Number(id)
+                var costoOra=15
+                let costo
+                if(controllo>0 && controllo!=null && Number.isInteger(controllo)){
+                    if(ore>1 && ore<10){
+                        costo=Number(ore*costoOra)
+                    }
+                    else if(ore>11 && ore<20){
+                        costo=Number((ore*costoOra)*0.05)
+                    }
+                    else if(ore>20){
+                        costo=Number((ore*costoOra)*0.10)
+                    }
+                    return costo
+                }
+                else{
+                    alert("dati sbagliati")
+                }
+                
+            }
+            
+            document.getElementById("myForm").reset()
+        }
+        
+        function risultato(){
+            for (let iscritto of iscritti){
+                tabella+=`<tr><td>${iscritto.id}</td><td>${iscritto.ore}</td><td>${iscritto.quota}</td></tr>`
+            }
+
+            for(let iscritto of iscritti){
+                if(iscritto.quota>=200){
+                    tabella2+= `<tr><td>${iscritto.id}</td><td>${iscritto.ore}</td><td>${iscritto.quota}</td></tr>`
+                }
+            }
+
+            tabella+="</table>"
+            document.getElementById("tabella").innerHTML= tabella
+            tabella2+= "</table>"
+            document.getElementById("tabella2").innerHTML = tabella2
+
+            document.getElementById("mostra").disabled= true
+        }
+    </script>
+</body>
+</html>
